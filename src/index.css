@@ -1,0 +1,205 @@
+@import 'tailwindcss';
+
+@theme {
+  /* 深色实验室底色：近黑 + 冷灰层级 */
+  --color-lab-void: #05070a;
+  --color-lab-bg: #0a0e12;
+  --color-lab-panel: #111820;
+  --color-lab-panel-2: #16202a;
+  --color-lab-line: #1f2c38;
+  --color-lab-ink: #e8f0f5;
+  --color-lab-dim: #7c8f9e;
+  --color-lab-faint: #4a5b68;
+
+  /* TRAE 品牌绿 */
+  --color-trae: #0fdc78;
+  --color-trae-bright: #32f08c;
+  --color-trae-deep: #02743b;
+  --color-trae-ink: #004d26;
+
+  /* 状态色 */
+  --color-warn: #efaa17;
+  --color-danger: #e8463a;
+
+  --font-display: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, 'SF Mono', ui-monospace, monospace;
+}
+
+@layer base {
+  html {
+    /*
+     * 以 1920×1080 为设计基准：根字号取 16px 对应的 0.8333vw，
+     * Tailwind 的字号/间距/圆角默认都是 rem，根字号一动，整套界面
+     * 就跟着视口等比缩放，投影到大屏时后排也能看清。
+     * 上下限避免超宽屏字体过大、小窗口字体过小。
+     */
+    font-size: clamp(13px, 0.8333vw, 26px);
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-lab-void);
+    color: var(--color-lab-ink);
+    font-family: var(--font-display);
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-lab-line);
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+@layer components {
+  /* 玻璃面板：实验室设备外壳质感 */
+  .glass {
+    background:
+      linear-gradient(180deg, rgb(255 255 255 / 0.04), rgb(255 255 255 / 0)),
+      var(--color-lab-panel);
+    border: 1px solid var(--color-lab-line);
+    backdrop-filter: blur(12px);
+  }
+
+  /* 实验室网格底纹 */
+  .lab-grid {
+    background-image:
+      linear-gradient(to right, rgb(31 44 56 / 0.55) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(31 44 56 / 0.55) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  /* 扫描线叠加层 */
+  .scanlines::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgb(255 255 255 / 0.028) 0 1px,
+      transparent 1px 3px
+    );
+    mix-blend-mode: screen;
+  }
+
+  /* 发光描边 */
+  .glow-trae {
+    box-shadow:
+      0 0 0 1px rgb(15 220 120 / 0.35),
+      0 0 24px rgb(15 220 120 / 0.18);
+  }
+
+  .text-glow {
+    text-shadow: 0 0 18px rgb(15 220 120 / 0.45);
+  }
+
+  /* 屏保跑马灯：内容复制两份，位移半程即可无缝循环 */
+  .marquee-track {
+    animation: marquee-x 30s linear infinite;
+  }
+
+  /* 压轴奖品全屏动效 */
+  .finale-rays {
+    background: conic-gradient(
+      from 0deg,
+      transparent 0deg,
+      rgb(15 220 120 / 0.5) 12deg,
+      transparent 24deg,
+      transparent 60deg,
+      rgb(15 220 120 / 0.28) 72deg,
+      transparent 84deg
+    );
+    animation: finale-spin 7s linear infinite;
+    opacity: 0.22;
+  }
+
+  .finale-vignette {
+    background: radial-gradient(
+      circle at center,
+      transparent 28%,
+      var(--color-lab-void) 76%
+    );
+  }
+
+  .finale-pop {
+    animation: finale-pop 900ms cubic-bezier(0.2, 0.9, 0.25, 1) both;
+  }
+
+  .wall-tile {
+    animation: wall-tile-in 260ms ease-out both;
+  }
+}
+
+@keyframes marquee-x {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes finale-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes finale-pop {
+  0% {
+    transform: scale(0.82);
+    opacity: 0;
+  }
+  18% {
+    transform: scale(1.04);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes wall-tile-in {
+  from {
+    transform: translateY(0.75rem);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track,
+  .finale-rays,
+  .finale-pop,
+  .wall-tile {
+    animation: none;
+  }
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
