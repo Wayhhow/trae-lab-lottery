@@ -31,10 +31,10 @@ jobs:
       - name: 类型检查与构建
         run: npm run build
 
-      # enablement: true 会在 Pages 尚未开启时自动开启，省去手动去 Settings 点开关
+      # 注意：不要加 enablement: true。
+      # 默认的 GITHUB_TOKEN 没有开启 Pages 的权限，一旦带上这个参数，本步骤必定失败并中断整个工作流。
+      # Pages 需要先在仓库开启一次（Settings → Pages → Source 选 GitHub Actions），之后本步骤只负责读取配置。
       - uses: actions/configure-pages@v5
-        with:
-          enablement: true
 
       - uses: actions/upload-pages-artifact@v3
         with:
