@@ -7,7 +7,7 @@ export interface BuiltinName {
   schoolId: string
 }
 
-/** 集赞轮名单：问卷.xlsx 中提交「集赞 15 个凭证」的 16 人 */
+/** 集赞轮名单：问卷.xlsx 中提交「集赞 15 个凭证」的 16 人 + 补录 2 人 */
 export const LIKES_ROSTER: readonly BuiltinName[] = [
   { no: '001', name: '朱唐宋', schoolId: '12611147' },
   { no: '002', name: '刘祉成', schoolId: '12611428' },
@@ -25,6 +25,8 @@ export const LIKES_ROSTER: readonly BuiltinName[] = [
   { no: '014', name: '吕霖松', schoolId: '12612319' },
   { no: '015', name: '胡馨澜', schoolId: '12411755' },
   { no: '016', name: '乔威栋', schoolId: '12612938' },
+  { no: '017', name: '卢胜', schoolId: '' },
+  { no: '018', name: '邹欣妤', schoolId: '' },
 ]
 
 /** 现场轮名单：组队名单.xlsx 中 25 支队伍 × 4 人 = 100 人 */
