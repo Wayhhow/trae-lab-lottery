@@ -13,17 +13,31 @@ const BUILTIN_SOURCES: Partial<Record<RoundId, readonly BuiltinName[]>> = {
 }
 
 /**
- * 名单为空且还没有抽奖记录时，用内置名单预填。
- * 只在"这一轮干干净净"时才填，绝不覆盖已经抽过的结果。
+ * 用内置名单预填 / 刷新本地快照，只在这一轮"干净"时才动：
+ * - 有抽奖记录 → 绝不改动，保护现场结果
+ * - 名单为空 → 预填（首次打开）
+ * - 名单里的人全都在内置名单上、只是人数少于内置 → 判定为内置名单补录过的旧快照，整体刷新
+ *   （例如集赞轮从 16 人补录到 18 人，老访客打开即可自动跟上）
+ * - 其余情况（手工增删改过）→ 保持原样
  */
+function withBuiltinRoster(round: RoundSnapshot, source: readonly BuiltinName[]): RoundSnapshot {
+  if (round.records.length > 0) return round
+  if (round.roster.length === 0) return { ...round, roster: builtinCandidates(source) }
+
+  const sourceNames = new Set(source.map((item) => item.name))
+  const untouched = round.roster.every((candidate) => sourceNames.has(candidate.name))
+  if (untouched && round.roster.length !== source.length) {
+    return { ...round, roster: builtinCandidates(source) }
+  }
+  return round
+}
+
 function withBuiltins(snapshot: LotterySnapshot): LotterySnapshot {
   const rounds = { ...snapshot.rounds }
   for (const roundId of ROUND_ORDER) {
     const source = BUILTIN_SOURCES[roundId]
     if (!source) continue
-    const round = rounds[roundId]
-    if (round.roster.length > 0 || round.records.length > 0) continue
-    rounds[roundId] = { ...round, roster: builtinCandidates(source) }
+    rounds[roundId] = withBuiltinRoster(rounds[roundId], source)
   }
   return { ...snapshot, rounds }
 }
