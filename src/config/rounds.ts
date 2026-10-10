@@ -19,8 +19,8 @@ export const ROUND_META: Record<RoundId, RoundMeta> = {
     id: 'likes',
     title: '集赞轮',
     code: 'R-01',
-    subtitle: '16 位候选人 · 10 份周边',
-    expectedCandidates: 16,
+    subtitle: '18 位候选人 · 10 份周边',
+    expectedCandidates: 18,
     rosterSource: 'own',
   },
   onsite: {
