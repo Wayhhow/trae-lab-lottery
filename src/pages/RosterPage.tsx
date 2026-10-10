@@ -103,7 +103,7 @@ function RosterStage({ roundId }: { roundId: RoundId }) {
                 <p className="text-[0.75rem] leading-relaxed text-lab-dim">
                   内置名单已从活动表格提取：
                   <span className="text-lab-ink">
-                    {roundId === 'likes' ? '问卷.xlsx 的 16 人' : '组队名单.xlsx 的 100 人'}
+                    {roundId === 'likes' ? '问卷.xlsx 的 16 人 + 补录 2 人' : '组队名单.xlsx 的 100 人'}
                   </span>
                   。首次打开时若名单为空会自动载入。
                 </p>
